@@ -3,22 +3,38 @@
 //Windows entrypoint
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	Window wnd(800, 600, "SkyEngine");
+	try {
+		Window wnd(800, 600, "SkyEngine");
 
-	MSG msg;
-	BOOL gResult;
+		MSG msg;
+		BOOL gResult;
 
-	while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		if (gResult == -1)
+		{
+			return -1;
+		}
+		else
+		{
+			return msg.wParam;
+		}
 	}
-	if (gResult == -1)
+	catch (const ExceptionManager& e)
 	{
-		return -1;
+		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
 	}
-	else
+	catch (std::exception& e)
 	{
-		return msg.wParam;
+		MessageBox(nullptr, e.what(), "Standard exception", MB_OK | MB_ICONEXCLAMATION);
 	}
+	catch (...)
+	{
+		MessageBox(nullptr, "No error info available!", "Unknown exception.", MB_OK | MB_ICONEXCLAMATION);
+	}
+	return -1;
+	
 }
