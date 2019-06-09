@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <sstream>
+#include "resource.h"
 
 //Window class creation
 Window::WindowClass Window::WindowClass::wndClass;
@@ -16,8 +17,8 @@ Window::WindowClass::WindowClass() noexcept
 	wc.cbWndExtra = 0;
 	wc.hbrBackground = nullptr;
 	wc.hCursor = nullptr;
-	wc.hIcon = nullptr;
-	wc.hIconSm = nullptr;
+	wc.hIcon = static_cast<HICON>(LoadImage(hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
+	wc.hIconSm = static_cast<HICON>(LoadImage(hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));
 	wc.hInstance = GetInstance();
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
@@ -39,7 +40,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 	return wndClass.hInst;
 }
 
-Window::Window(int width, int height, const char * name) noexcept
+Window::Window(int width, int height, const char * name)
 {
 	//Calculate window size based on desired client region size
 	RECT wr = { 0 };
@@ -47,7 +48,10 @@ Window::Window(int width, int height, const char * name) noexcept
 	wr.right = width + wr.right;
 	wr.top = 100;
 	wr.bottom = height + wr.top;
-	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	if (FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	{
+		throw SKYENGINE_LAST_EXCEPT();
+	};
 
 	//Create window and get hWnd
 	hWnd = CreateWindow(
@@ -56,7 +60,11 @@ Window::Window(int width, int height, const char * name) noexcept
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this);
-
+	//check for error
+	if (hWnd == nullptr)
+	{
+		throw SKYENGINE_LAST_EXCEPT();
+	}
 	//Show window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 }
