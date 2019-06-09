@@ -1,0 +1,78 @@
+#include "WindowsMessageMap.h"
+#include <sstream>
+#include <iomanip>
+#include <string>
+
+#define REGISTER_MESSAGE(msg){msg, #msg}
+
+WindowsMessageMap::WindowsMessageMap()
+	:
+	map({
+	REGISTER_MESSAGE(WM_CREATE),
+	REGISTER_MESSAGE(WM_DESTROY),
+	REGISTER_MESSAGE(WM_MOVE),
+	REGISTER_MESSAGE(WM_SIZE),
+	REGISTER_MESSAGE(WM_ACTIVATE),
+	REGISTER_MESSAGE(WM_SETFOCUS),
+	REGISTER_MESSAGE(WM_KILLFOCUS),
+	REGISTER_MESSAGE(WM_SETREDRAW),
+	REGISTER_MESSAGE(WM_ENABLE),
+	REGISTER_MESSAGE(WM_SETTEXT),
+	REGISTER_MESSAGE(WM_PAINT),
+	REGISTER_MESSAGE(WM_CLOSE),
+	REGISTER_MESSAGE(WM_QUERYENDSESSION),
+	REGISTER_MESSAGE(WM_QUIT),
+	REGISTER_MESSAGE(WM_SHOWWINDOW),
+	REGISTER_MESSAGE(WM_WININICHANGE),
+	REGISTER_MESSAGE(WM_ACTIVATEAPP),
+	REGISTER_MESSAGE(WM_FONTCHANGE),
+	REGISTER_MESSAGE(WM_TIMECHANGE),
+	REGISTER_MESSAGE(WM_SETCURSOR),
+	REGISTER_MESSAGE(WM_MOUSEACTIVATE),
+	REGISTER_MESSAGE(WM_PAINTICON),
+	REGISTER_MESSAGE(WM_INPUT),
+	REGISTER_MESSAGE(WM_KEYDOWN),
+	REGISTER_MESSAGE(WM_KEYUP),
+	REGISTER_MESSAGE(WM_CHAR),
+	REGISTER_MESSAGE(WM_SYSKEYDOWN),
+	REGISTER_MESSAGE(WM_SYSKEYUP),
+	REGISTER_MESSAGE(WM_SYSCHAR),
+	REGISTER_MESSAGE(WM_MOUSEMOVE),
+	REGISTER_MESSAGE(WM_LBUTTONDOWN),
+	REGISTER_MESSAGE(WM_LBUTTONUP),
+	REGISTER_MESSAGE(WM_RBUTTONDOWN),
+	REGISTER_MESSAGE(WM_RBUTTONUP),
+	REGISTER_MESSAGE(WM_LBUTTONDBLCLK),
+	REGISTER_MESSAGE(WM_RBUTTONDBLCLK),
+	REGISTER_MESSAGE(WM_MBUTTONDOWN),
+	REGISTER_MESSAGE(WM_MBUTTONUP),
+	REGISTER_MESSAGE(WM_MOUSELAST),
+	REGISTER_MESSAGE(WM_MOUSEWHEEL),
+	REGISTER_MESSAGE(WM_SIZING),
+	REGISTER_MESSAGE(WM_MOVING),
+
+		})
+{
+}
+
+std::string WindowsMessageMap::operator()(DWORD msg, WPARAM wp, LPARAM lp) const
+{
+	constexpr int firstColWidth = 25;
+	const auto i = map.find(msg);
+
+	std::ostringstream oss;
+	if (i != map.end())
+	{
+		oss << std::left << std::setw(firstColWidth) << i->second << std::right;
+	}
+	else
+	{
+		std::ostringstream padss;
+		padss << "Unknown message: 0x" << std::hex << msg;
+		oss << std::left << std::setw(firstColWidth) << padss.str() << std::right;
+	}
+	oss << "   LP: 0x" << std::hex << std::setfill('0') << std::setw(8) << lp;
+	oss << "   WP: 0x" << std::hex << std::setfill('0') << std::setw(8) << wp << std::endl;
+
+	return oss.str();
+}

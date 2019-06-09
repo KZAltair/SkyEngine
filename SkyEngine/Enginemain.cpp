@@ -1,11 +1,26 @@
 #include <Windows.h>
+#include "WindowsMessageMap.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) //Returns a 32bit int value
 {
+	static WindowsMessageMap mm;
+	OutputDebugString(mm(msg, wParam, lParam).c_str());
 	switch (msg)
 	{
 	case WM_CLOSE:
 		PostQuitMessage(69);
+		break;
+	case WM_KEYDOWN:
+		if (wParam == 'F')
+		{
+			SetWindowText(hwnd, "Worked!");
+		}
+		break;
+	case WM_KEYUP:
+		if (wParam == 'F')
+		{
+			SetWindowText(hwnd, "Back to normal!");
+		}
 		break;
 	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);
