@@ -13,6 +13,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			if (wnd.kbd.KeyIsPressed(VK_SPACE))
+			{
+				MessageBox(nullptr, "Key pressed", "Space was pressed.", MB_OK | MB_ICONEXCLAMATION);
+			}
 		}
 		if (gResult == -1)
 		{
@@ -20,7 +24,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		}
 		else
 		{
-			return msg.wParam;
+			return (int)msg.wParam;
 		}
 	}
 	catch (const ExceptionManager& e)
