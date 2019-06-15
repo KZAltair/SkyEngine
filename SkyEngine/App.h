@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include "SkyEngineTimer.h"
 
 class App
 {
@@ -11,4 +12,5 @@ private:
 	void DoFrame(); //Logic for every frame should be here
 private:
 	Window wnd;
+	SkyTimer timer;
 };
