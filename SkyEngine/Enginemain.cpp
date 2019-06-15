@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <sstream>
 
 //Windows entrypoint
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -20,6 +21,17 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			if (wnd.kbd.KeyIsPressed(VK_MENU))
 			{
 				MessageBox(nullptr, "Alt Pressed", "Key pressed.", MB_OK | MB_ICONEXCLAMATION);
+			}
+			//do app logic test
+			while (!wnd.mouse.isEmpty())
+			{
+				const auto e = wnd.mouse.Read();
+				if (e.GetType() == Mouse::Event::Type::Move)
+				{
+					std::ostringstream oss;
+					oss << "Mouse position: (" << e.GetPosX() << ", " << e.GetPosY() << ")";
+					wnd.SetTitle(oss.str());
+				}
 			}
 		}
 		if (gResult == -1)

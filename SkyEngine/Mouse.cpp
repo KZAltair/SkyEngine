@@ -27,7 +27,7 @@ bool Mouse::RightIsPressed() const noexcept
 
 Mouse::Event Mouse::Read() noexcept
 {
-	if (buffer.size > 0u)
+	if (buffer.size() > 0u)
 	{
 		Mouse::Event e = buffer.front();
 		buffer.pop();
