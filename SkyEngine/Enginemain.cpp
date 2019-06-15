@@ -17,6 +17,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			{
 				MessageBox(nullptr, "Key pressed", "Space was pressed.", MB_OK | MB_ICONEXCLAMATION);
 			}
+			if (wnd.kbd.KeyIsPressed(VK_MENU))
+			{
+				MessageBox(nullptr, "Alt Pressed", "Key pressed.", MB_OK | MB_ICONEXCLAMATION);
+			}
 		}
 		if (gResult == -1)
 		{
