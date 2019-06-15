@@ -22,10 +22,12 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			{
 				MessageBox(nullptr, "Alt Pressed", "Key pressed.", MB_OK | MB_ICONEXCLAMATION);
 			}
+			static int count = 0;
 			//do app logic test
 			while (!wnd.mouse.isEmpty())
 			{
 				const auto e = wnd.mouse.Read();
+				
 				switch (e.GetType())
 				{
 				case Mouse::Event::Type::Leave:
@@ -38,6 +40,22 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 						wnd.SetTitle(oss.str());
 					}
 					break;
+				case Mouse::Event::Type::WheelUp:
+				{
+					count++;
+					std::ostringstream oss;
+					oss << "Up: (" << count << ")";
+					wnd.SetTitle(oss.str());
+				}
+				break;
+				case Mouse::Event::Type::WheelDown:
+				{
+					count--;
+					std::ostringstream oss;
+					oss << "Up: (" << count << ")";
+					wnd.SetTitle(oss.str());
+				}
+				break;
 				}
 				
 			}
