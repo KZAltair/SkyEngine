@@ -151,14 +151,14 @@ LRESULT Window::HandleMsg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 			mouse.OnMouseMove(pt.x, pt.y);
 			if (!mouse.isInWindow())
 			{
-				SetCapture(hwnd); // Check Handle
+				SetCapture(hWnd); // Check Handle
 				mouse.OnMouseEnter();
 			}
 		}
 		//not in client region -> log move, maintain capture if button down
 		else
 		{
-			if (wParam &(MK_LBUTTON | MK_RBUTTON))
+			if (wParam & (MK_LBUTTON | MK_RBUTTON) )
 			{
 				mouse.OnMouseMove(pt.x, pt.y);
 			}
@@ -198,14 +198,8 @@ LRESULT Window::HandleMsg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	case WM_MOUSEWHEEL:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
-		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-		{
-			mouse.OnWheelUp(pt.x, pt.y);
-		}
-		else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
-		{
-			mouse.OnWheelDown(pt.x, pt.y);
-		}
+		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+		mouse.OnWheelDelta(pt.x, pt.y, delta);
 		break;
 	}
 	//End of mouse handling messages
